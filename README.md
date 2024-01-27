@@ -3,10 +3,6 @@
 This project is an excercise project, to practice writing react hooks and
 to try and recreate a website from the view.
 
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ## Available Scripts
 
 In the project directory, you can run:
