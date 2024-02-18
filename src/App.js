@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import KEY from "./omdbapikey.js";
 
 const tempMovieData = [
   {
@@ -229,8 +230,6 @@ function WatchedMovie({ movie }) {
     </li>
   );
 }
-
-const KEY = "f4fd38da";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
