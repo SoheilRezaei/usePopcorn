@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import KEY from "./omdbapikey.js";
+import StarRating from "./StarRating.js";
 
 const tempMovieData = [
   {
@@ -132,7 +133,7 @@ function MoviesList({ movies, onSelectMovie }) {
 
 function Movie({ movie, onSelectMovie }) {
   return (
-    <li key={movie.imdbID} onClick={() => onSelectMovie(movie.imdbID)}>
+    <li onClick={() => onSelectMovie(movie.imdbID)}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
@@ -196,11 +197,71 @@ function WatchedSummary({ watched }) {
   );
 }
 function MovieDetails({ selectedId, onCloseMovie }) {
+  const [movie, setMovie] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Released: released,
+    Actors: actors,
+    Director: director,
+    Genre: genre,
+  } = movie;
+  useEffect(
+    function () {
+      async function getMovieDetails() {
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?i=${selectedId}&apikey=${KEY}`
+        );
+        const data = await res.json();
+        setMovie(data);
+        setIsLoading(false);
+      }
+      getMovieDetails();
+    },
+    [selectedId]
+  );
+
   return (
     <div className="details">
-      <button className="btn-back" onClick={onCloseMovie}>
-        &larr;
-      </button>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <header>
+            <button className="btn-back" onClick={onCloseMovie}>
+              &larr;
+            </button>
+            <div className="details-overview">
+              <h2>{title}</h2>
+              <p>
+                {released} &bull; {runtime}
+              </p>
+              <p>{genre}</p>
+              <p>
+                <span>⭐</span>
+                {imdbRating} IMDB rating
+              </p>
+            </div>
+            <img src={poster} alt={`${title} poster`} />
+          </header>
+          <section>
+            <div className="rating">
+              <StarRating maxRating={10} size={24} />
+            </div>
+            <p>
+              <em>{plot}</em>
+            </p>
+            <p>Starring {actors}</p>
+            <p>Directed by {director}</p>
+          </section>
+        </>
+      )}
     </div>
   );
 }
@@ -262,14 +323,13 @@ export default function App() {
           const res = await fetch(
             `http://www.omdbapi.com/?s=${query}&apikey=${KEY}`
           );
-
+          console.log("IM FETCHING MOVIES! 🍿");
           if (!res.ok) {
             throw new Error("Oops! Something went wrong with fetching movies.");
           }
           const data = await res.json();
           if (data.Response === "False") throw new Error("Movie Not Found!");
           setMovies(data.Search);
-          setIsLoading(false);
         } catch (err) {
           console.error(err.message);
           setError(err.message);
@@ -277,7 +337,7 @@ export default function App() {
           setIsLoading(false);
         }
       }
-      if ((!query.length, 3)) {
+      if (!query.length < 3) {
         setMovies([]);
         setError("");
         return;
@@ -295,15 +355,6 @@ export default function App() {
         <NumOfResults movies={movies} />
       </NavBar>
       <Main>
-        {/* <Box element={<MoviesList movies={movies} />} />
-        <Box
-          element={
-            <>
-              <WatchedSummary watched={watched} />
-              <WatchedMoviesList watched={watched} />
-            </>
-          }
-        /> */}
         <Box>
           {isLoading && <Loader />}
           {!isLoading && !error && (
