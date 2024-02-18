@@ -320,6 +320,7 @@ export default function App() {
         try {
           setIsLoading(true);
           setError("");
+
           const res = await fetch(
             `http://www.omdbapi.com/?s=${query}&apikey=${KEY}`
           );
@@ -330,6 +331,7 @@ export default function App() {
           const data = await res.json();
           if (data.Response === "False") throw new Error("Movie Not Found!");
           setMovies(data.Search);
+          setError("");
         } catch (err) {
           console.error(err.message);
           setError(err.message);
@@ -337,7 +339,7 @@ export default function App() {
           setIsLoading(false);
         }
       }
-      if (!query.length < 3) {
+      if (query.length < 3) {
         setMovies([]);
         setError("");
         return;
