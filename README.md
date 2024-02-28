@@ -1,7 +1,11 @@
-# A clone of the netlify usepopcorn website (Front-end only so far)
+# IMBD API Movie website
 
-This project is an excercise project, to practice writing react hooks and
-to try and recreate a website from the view.
+This project is an excercise project, to practice writing react hooks and to try and recreate 
+a website from the view. The original website is https://usepopcorn.netlify.app/
+The website has a search function that looks up the movie and returns the imdb score and different
+information about the movie. You can add this movie to your watched list and give it a rating.
+The movie will then show up on the list of your watched movies and show your and imdb's rating
+and the movie's length in that list.
 
 ## Available Scripts
 
