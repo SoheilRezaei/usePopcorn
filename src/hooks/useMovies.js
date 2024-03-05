@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import KEY from "./omdbapikey.js";
+import KEY from "../omdbapikey.js";
 export default function useMovies(query) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
